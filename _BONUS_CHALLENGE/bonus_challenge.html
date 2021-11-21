@@ -1,0 +1,67 @@
+<html>
+
+<body>
+    <input type="text" id="val1">
+    <input type="text" id="val2">
+    <button id="btn">Calculate</button>
+</body>
+
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    function comapreValue(arg1, arg2) {
+        return arg1.length > arg2.length
+            ? addStartingZeros(
+                arg2,
+                arg1.length - arg2.length
+            )
+            : arg2;
+    }
+
+    function addStartingZeros(val, num) {
+        while (num > 0) {
+            val = "0" + val;
+            num--;
+        }
+        return val;
+    }
+
+    function intToBinary(val) {
+        return Number(val).toString(2);
+    }
+
+    function calculate(val1, val2) {
+        val2 = comapreValue(
+            val1, val2
+        )
+        val1 = comapreValue(
+            val2, val1
+        )
+
+        var num = 0, count = 0;
+        while (num < val1.length) {
+            if (val1[num] != val2[num]) {
+                count++;
+            }
+            num++;
+        }
+        return val1 + " " + val2 + " = " + count;
+    }
+
+    $(document).ready(function () {
+        $('#btn').click(function () {
+            var val1 = intToBinary(
+                $('#val1').val()
+            ).toString();
+            var val2 = intToBinary(
+                $('#val2').val()
+            ).toString();
+            console.log(calculate(
+                val1,
+                val2
+            ))
+        });
+    });
+</script>
