@@ -33,7 +33,7 @@ class GituserController extends Controller
     }
 
     /**
-     * Gets github user's information from cache or API
+     * Gets github user's information from cache
      *
      * @param string $username
      * @return mixed
