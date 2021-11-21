@@ -12,22 +12,21 @@ After successfully pulling the code base from the repository, the following step
 
 ### Step 1 - Create a database
 Create a database named `kumu_db`
-
-### Step 2 - Setup the database tables and fields
-In the project dir run
-```
-php artisan migrate
-```
-### Step 3 - Install the dependencies
-```
-composer install
-```
-### Step 4 - Update the .env file
+### Step 2 - Update the .env file
 Fill up your localhost and database credentials and
 update the following lines
 ```
 CACHE_DRIVER=redis
 REDIS_CLIENT=predis
+```
+### Step 3 - Setup the database tables and fields
+In the project dir run
+```
+php artisan migrate
+```
+### Step 4 - Install the dependencies
+```
+composer install
 ```
 ### Step 5 - Start the app
 ```
