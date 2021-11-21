@@ -1,6 +1,6 @@
 ## Kumu Exam (Backend Developer Assessment)
 
-This app serves as an assessement exam for the position Backend Developer. This service allows registered users the get github users' information using their username.
+This app serves as an assessement exam for the position Backend Developer. This service allows registered users to get github users' information using their username.
 
 ## Dependencies
 - Laravel passport
@@ -22,12 +22,19 @@ php artisan migrate
 ```
 composer install
 ```
-### Step 4 - Start the app
+### Step 4 - Update the .env file
+Fill up your localhost and database credentials and
+update the following lines
+```
+CACHE_DRIVER=redis
+REDIS_CLIENT=predis
+```
+### Step 5 - Start the app
 ```
 php artisan serve
 ```
 
-### Step 5 - Access the endpoints
+### Step 6 - Access the endpoints
 #### Register
 ```
 curl --location --request POST 'http://localhost:8000/api/user/register' \
