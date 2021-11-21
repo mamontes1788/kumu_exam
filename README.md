@@ -20,11 +20,11 @@ CACHE_DRIVER=redis
 REDIS_CLIENT=predis
 ```
 ### Step 3 - Install the dependencies
+In the project dir run
 ```
 composer install
 ```
 ### Step 4 - Setup the database tables and fields and generate key
-In the project dir run
 ```
 php artisan migrate
 php artisan passport:install
