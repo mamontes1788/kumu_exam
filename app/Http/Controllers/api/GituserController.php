@@ -37,6 +37,26 @@ class GituserController extends Controller
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Gets github user's information from cache
+     *
+     * @param string $username
+     * @return mixed
+     */
+    private function checkCacheData($username)
+    {
+        return Cache::remember(
+            'gituser_' . $username,
+            static::CACHE_IN_SECS,
+            function () use ($username) {
+                return  $this->getGithubUserInfo($username);
+            }
+        );
+    }
+
+    /**
+>>>>>>> 8173e7551ff02e03e2096542a89beaf64ae62fb2
      * Sorts the given data by it's name
      *
      * @param mixed $githubUsers
