@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Gituser\{
+    GitUserCache
+};
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class GituserController extends Controller
 {
-    const CACHE_IN_SECS = 120,
-        URL = 'https://api.github.com/users/';
+    private $gitUserCache;
 
+    public function __construct(GitUserCache $gitUserCache)
+    {
+        $this->gitUserCache = $gitUserCache;
+    }
 
     /**
      * Formats the given data
@@ -19,7 +23,7 @@ class GituserController extends Controller
      * @param mixed $resource
      * @return mixed
      */
-    private function formatData($resource)
+    private function formatData(object $resource): array
     {
         return array(
             'login' => $resource->login,
@@ -33,61 +37,18 @@ class GituserController extends Controller
     }
 
     /**
-     * Gets github user's information from cache or API
-     *
-     * @param string $username
-     * @return mixed
-     */
-    private function checkCacheData($username)
-    {
-        return Cache::remember(
-            'gituser_' . $username,
-            static::CACHE_IN_SECS,
-            function () use ($username) {
-                return  $this->getGithubUserInfo($username);
-            }
-        );
-    }
-
-    /**
      * Sorts the given data by it's name
      *
      * @param mixed $githubUsers
      * @return mixed
      */
-    private function sortData($githubUsers)
+    private function sortData(array $githubUsers): array
     {
         usort($githubUsers, function ($a, $b) {
             return strcmp($a['name'], $b['name']);
         });
 
         return $githubUsers;
-    }
-
-    /**
-     * Gets Github user information from API
-     *
-     * @param string $username
-     * @return mixed
-     */
-    private function getGithubUserInfo($username)
-    {
-        try {
-            $client = new \GuzzleHttp\Client();
-            $response = json_decode(
-                $client->request(
-                    'GET',
-                    static::URL . $username
-                )
-                    ->getBody()
-                    ->getContents()
-            );
-
-            return $this->formatData($response);
-        } catch (BadResponseException  $e) {
-            return $e->getResponse()
-                ->getBody();
-        }
     }
 
     /**
@@ -109,9 +70,9 @@ class GituserController extends Controller
         );
         $githubUsers = [];
         foreach ($usernames as $username) {
-            $githubUserInfo = $this->checkCacheData($username);
-            if (is_array($githubUserInfo)) {
-                $githubUsers[] = $githubUserInfo;
+            $githubUserInfo = $this->gitUserCache->getCacheData($username);
+            if (isset($githubUserInfo->login)) {
+                $githubUsers[] = $this->formatData($githubUserInfo);
             }
         }
 
